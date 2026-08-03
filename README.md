@@ -46,9 +46,16 @@ Standard policy pages (Privacy, Returns, Terms) are excluded from this list.
 
 ### Stretch A — GitHub Integration via Admin
 
+* Connected the `block-supply-co` GitHub repository to the Shopify Theme Editor 
+via Online Store > Themes > Add theme > Connect from GitHub. Selected the  `Kavin-Maziya/block-supply-co` repository and the `main` branch.
+
 **Difference between local CLI changes vs Theme Editor changes when GitHub sync is active:**
 
-> *(To be filled in after completing Stretch A)*
+* When changes are made locally using `shopify theme dev`, those changes only live on my my local code and sync to the store preview in real time — but they don't automatically synced to GitHub. I still need to `git commit` and `git push` to update the repo.
+
+* When changes are made in the Shopify Theme Editor, those changes save directly to the store but they don't go back to GitHub either — so my local code and the GitHub repo won't reflect what was changed in the editor.
+
+**This means the CLI is for code changes, and the Theme Editor is for content and design changes — and you must be careful not to let them get out of sync.**
 
 ### Stretch B — VS Code Configuration
 
