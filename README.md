@@ -2,31 +2,19 @@
 
 ---
 
-## Table of Contents
-
-1. [Store Brief](#1-store-brief)
-   - [Niche Selection](#11-niche-selection)
-   - [Target Audience](#12-target-audience)
-2. [Page Scope](#2-page-scope)
-3. [Dev Environment](#3-dev-environment)
-
----
-
 ## 1. Store Brief
 
 ### 1.1 Niche Selection
 
-**Chosen niche:** Premium sneaker & streetwear online store called **Block Supply Co.**
+* Premium sneaker & streetwear online store called **Block Supply Co.**
 
-**Product complexity justification:**
-
-Sneakers and streetwear are ideal for demonstrating advanced Shopify features because they have multiple variants on every product like size (numeric UK/US/EU scales), colorway (often named "Off White" or "University Blue" rather than generic colors), and gender fit (Men's / Women's / Grade-School). Beyond variants, the niche will contain brand metafields like release-date metafields for "Coming Soon" drops, and exclusivity tags, all of which will be necessary to implement advanced collection filtering and custom metafield displays later in the week.
+* Sneakers and streetwear are ideal for demonstrating advanced Shopify features because they have multiple variants on every product like size (numeric UK/US/EU scales), colorway (often named "Off White" or "University Blue" rather than generic colors), and gender fit (Men's / Women's / Grade-School). Beyond variants, the niche will contain brand metafields like release-date metafields for "Coming Soon" drops, and exclusivity tags, all of which will be necessary to implement advanced collection filtering and custom metafield displays later in the week.
 
 ---
 
 ### 1.2 Target Audience
 
-Block Supply Co. serves Genz and Millenials (18–34 year olds) in South African neighbourhoods either the suburbs and townships who follow global sneaker culture and prioritise brand authenticity over fast fashion. They are digitally native, regularly browse drop schedules, and expect detailed product information — including colourway names, release dates, and size guides — before committing to a purchase.
+* Block Supply Co. serves Genz and Millenials (18–34 year olds) in South African neighbourhoods either the suburbs and townships who follow global sneaker culture and prioritise brand authenticity over fast fashion. They are digitally native, regularly browse drop schedules, and expect detailed product information — including colourway names, release dates, and size guides — before committing to a purchase.
 
 ---
 
@@ -50,7 +38,7 @@ Standard policy pages (Privacy, Returns, Terms) are excluded from this list.
 | **Development store URL** | block-supply-co-dev.myshopify.com |
 | **GitHub repository** | https://github.com/Kavin-Maziya/block-supply-co |
 | **Shopify CLI version** | 4.6.0 |
-| **Hot reloading verified** | ☐ Confirmed on `http://127.0.0.1:9292` |
+| **Hot reloading verified** | ☑ Confirmed on `http://127.0.0.1:9292` |
 
 ---
 
