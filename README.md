@@ -46,20 +46,23 @@ Standard policy pages (Privacy, Returns, Terms) are excluded from this list.
 
 ### Stretch A — GitHub Integration via Admin
 
-*(Complete after all checkpoints are verified)*
-
 **Difference between local CLI changes vs Theme Editor changes when GitHub sync is active:**
 
 > *(To be filled in after completing Stretch A)*
 
 ### Stretch B — VS Code Configuration
 
-*(Complete after all checkpoints are verified)*
-
-**Liquid auto-format setting added to `.vscode/settings.json`:**
+* Installed the official **Shopify Liquid** extension by Shopify in VS Code. 
+Configured `.vscode/settings.json` to automatically format Liquid files on save 
+using the following JSON setting:
 
 ```json
-// To be documented here after completing Stretch B
+{
+  "[liquid]": {
+    "editor.defaultFormatter": "Shopify.theme-check-vscode",
+    "editor.formatOnSave": true
+  }
+}
 ```
 
 ---
