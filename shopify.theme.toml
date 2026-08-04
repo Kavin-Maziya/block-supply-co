@@ -1,0 +1,3 @@
+[environments.default]
+store = "block-supply-co-dev.myshopify.com"
+theme = "149023326250"

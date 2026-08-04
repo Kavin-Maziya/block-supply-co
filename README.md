@@ -42,6 +42,31 @@ Standard policy pages (Privacy, Returns, Terms) are excluded from this list.
 
 ---
 
+## 4. Theme Update — Dawn to Horizon
+
+1. Added Horizon to the dev store via **Online Store → Themes → Add theme → Visit Theme Store**
+2. Listed all themes using the CLI to get Horizon's theme ID:
+
+`shopify theme list --store=block-supply-co-dev.myshopify.com`
+
+3. Pulled Horizon's files down locally using the theme ID `149023326250`:
+
+`shopify theme pull --theme=149023326250 --store=block-supply-co-dev.myshopify.com`
+
+4. Created `shopify.theme.toml` in the project root to set Horizon as the default theme so `shopify theme dev` picks it up automatically without needing flags every time:
+
+```toml
+   [environments.default]
+   store = "block-supply-co-dev.myshopify.com"
+   theme = "149023326250"
+```
+   > **Note:** The toml must use `[environments.default]` — any other named environment requires an explicit `--environment` flag. Also the file must be in the project root, not inside any subfolder.
+
+5. Verified Horizon is running correctly at `http://127.0.0.1:9292` with `preview_theme_id=149023326250` confirmed in the terminal.
+
+---
+
+
 ## Stretch Goals
 
 ### Stretch A — GitHub Integration via Admin
