@@ -114,6 +114,39 @@
     "
   >
     {{ children }}
+
+    {% comment %} Block Supply Co. — Day 2 Liquid Filters & Conditional {% endcomment %}
+    {% unless onboarding %}
+      <div class="bsc-product-meta" style="padding: 4px 0; font-size: 0.8rem;">
+
+        {% comment %} Filter 4: upcase — product title in all caps {% endcomment %}
+        <p style="font-weight: bold; letter-spacing: 0.08em; margin: 0 0 2px;">
+          {{ product.title | upcase }}
+        </p>
+
+        {% comment %} Filter 5: capitalize — brand/vendor name {% endcomment %}
+        <p style="color: #888; font-size: 0.75rem; margin: 0 0 4px;">
+          {{ product.vendor | capitalize }}
+        </p>
+
+        {% comment %} Filter 3: truncate — short description preview {% endcomment %}
+        <p style="color: #555; font-size: 0.78rem; margin: 0 0 6px;">
+          {{ product.description | truncate: 100 }}
+        </p>
+
+        {% comment %} Conditional — product.available {% endcomment %}
+        {% if product.available %}
+          <button style="padding: 6px 14px; background: #000; color: #fff; border: none; font-size: 0.78rem; cursor: pointer;">
+            Add to Cart
+          </button>
+        {% else %}
+          <span style="display: inline-block; padding: 6px 14px; background: #eee; color: #999; font-size: 0.78rem;">
+            Sold Out
+          </span>
+        {% endif %}
+
+      </div>
+    {% endunless %}
   </div>
 </product-card>
 

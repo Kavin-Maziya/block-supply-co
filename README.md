@@ -98,3 +98,57 @@ using the following JSON setting:
 ```
 
 ---
+
+## Day 2 — Liquid Fundamentals
+
+### Part 1 — Filter & Conditional Plan
+
+#### 1.1 Filter Inventory
+
+| # | Filter | File | What it changes on the page |
+|---|--------|------|-----------------------------|
+| 1 | `money` | `blocks/price.liquid` | Turns the raw price number into a readable currency format like `R299.00` instead of displaying `29900` |
+| 2 | `image_url` | `blocks/product-card.liquid` | Generates the correct web address for the product image at a set width so the browser can load it at the right size |
+| 3 | `truncate` | `blocks/product-description.liquid` | Cuts long product descriptions short on product cards so they don't overflow the layout |
+| 4 | `upcase` | `blocks/product-title.liquid` | Displays the product title in all caps — e.g. `"Nike Air Force 1"` becomes `"NIKE AIR FORCE 1"` — for streetwear styling |
+| 5 | `capitalize` | `blocks/_product-card.liquid` | Ensures the product vendor/brand name always starts with a capital letter — e.g. `"adidas"` becomes `"Adidas"` |
+
+#### 1.2 Conditional Logic Plan
+
+- **Object/property driving the condition:** `product.available`
+- **File:** `blocks/product-card.liquid`
+- **True branch:** When `product.available` is true, an "Add to Cart" button is displayed
+- **False branch:** When `product.available` is false, a "Sold Out" badge is displayed instead of the button
+
+---
+
+### Part 2 — Product Page Section Edits
+
+All filters and the conditional were implemented in `snippets/product-card.liquid`. 
+Horizon is heavily componentized — blocks like `blocks/price.liquid` and 
+`blocks/product-description.liquid` delegate their output to snippets via 
+`{% render %}`, so the actual product data is only directly accessible in the 
+snippet layer.
+
+Filters `money` and `image_url` are already used internally by Horizon in 
+`snippets/price.liquid` and `snippets/product-card.liquid` respectively — 
+confirmed by reviewing those files. The 3 new filters added are `upcase`, 
+`capitalize`, and `truncate`.
+
+### Part 3 — Collection Page Section Edits
+
+The collection page at `http://127.0.0.1:9292/collections/all` uses the same 
+`snippets/product-card.liquid` snippet to render each product card in the grid. 
+This means all 5 filters and the conditional are active on the collection page 
+as well, bringing the combined total to 5 distinct filters across both pages.
+
+### Verification Notes
+
+- Collection page tested at `http://127.0.0.1:9292/collections/all`
+- Product cards showing upcase titles, capitalize vendor, truncated description, 
+  and formatted prices
+- Both conditional branches confirmed — "Add to Cart" on available products, 
+  "Sold Out" on unavailable products
+- No Liquid errors in the terminal during testing
+
+---
