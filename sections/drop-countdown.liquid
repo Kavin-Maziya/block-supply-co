@@ -1,0 +1,46 @@
+{%- liquid
+  assign bg = section.settings.section_background
+-%}
+
+<div
+  class="drop-countdown section"
+  style="
+    {% if bg != blank %}background-color: {{ bg }};{% endif %}
+    padding: 60px 20px;
+    text-align: center;
+  "
+>
+  <div
+    class="drop-countdown__inner"
+    style="
+      max-width: 800px;
+      margin: 0 auto;
+    "
+  >
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Drop Countdown",
+  "settings": [
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Background color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@theme"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drop Countdown",
+      "category": "Drop"
+    }
+  ]
+}
+{% endschema %}

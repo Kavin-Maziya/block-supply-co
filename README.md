@@ -152,3 +152,65 @@ as well, bringing the combined total to 5 distinct filters across both pages.
 - No Liquid errors in the terminal during testing
 
 ---
+
+---
+
+## Day 3 — Sections, Blocks & Schema
+
+### Part 1 — Section & Block Plan
+
+#### 1.1 Section Concepts
+
+**Section 1: Brand Showcase** → `sections/brand-showcase.liquid`
+
+A homepage section that highlights the key brands stocked at Block Supply Co. Each brand gets its own block displaying a logo, name, and a short tagline. It gives the store an editorial feel similar to Shelflife's brand directory, and lets merchants reorder or add brands without touching code.
+
+**Section 2: Drop Countdown** → `sections/drop-countdown.liquid`
+
+A homepage section that announces an upcoming sneaker or streetwear drop with a product image, drop name, release date and a countdown timer. It builds hype for new releases the way Shelflife does with their "Coming Soon" drops, and lets merchants configure each upcoming drop without touching code.
+
+---
+
+#### 1.2 Block Inventory
+
+| Block type | Filename | Purpose | Reusable? |
+|---|---|---|---|
+| `brand-logo` | `blocks/brand-logo.liquid` | Displays a brand's logo image with a link to their collection page | Reusable elsewhere in the theme |
+| `brand-card` | `blocks/brand-card.liquid` | Displays brand name, tagline, and a "Shop Now" link as a text card | Specific to brand-showcase section |
+| `brand-heading` | `blocks/brand-heading.liquid` | A configurable heading block e.g. "Featured Brands" that merchants can reposition or hide | Reusable elsewhere in the theme |
+| `drop-title` | `blocks/drop-title.liquid` | Displays the drop name and release date label for an upcoming drop | Specific to drop-countdown section |
+| `drop-image` | `blocks/drop-image.liquid` | Displays the product teaser image for the upcoming drop | Specific to drop-countdown section |
+| `drop-timer` | `blocks/drop-timer.liquid` | Renders a static countdown display with a configurable target release date | Specific to drop-countdown section |
+
+---
+
+#### 1.3 Settings Plan
+
+| Setting id | Type | File | What it visibly changes |
+|---|---|---|---|
+| `background_color` | `color` | `sections/brand-showcase.liquid` | Background colour of the entire brand showcase section |
+| `columns` | `range` | `sections/brand-showcase.liquid` | Number of brand blocks displayed per row (2–4) |
+| `logo_size` | `range` | `blocks/brand-logo.liquid` | Display width of the brand logo image in pixels |
+| `show_tagline` | `checkbox` | `blocks/brand-card.liquid` | Toggles the brand tagline text visible or hidden |
+| `link_url` | `url` | `blocks/brand-card.liquid` | Sets the destination URL for the "Shop Now" link |
+| `section_background` | `color` | `sections/drop-countdown.liquid` | Background colour of the drop countdown section |
+| `release_date` | `text` | `blocks/drop-timer.liquid` | Sets the target release date displayed in the countdown |
+| `drop_label` | `text` | `blocks/drop-title.liquid` | Sets the drop label e.g. "Exclusive Drop" or "Coming Soon" |
+
+---
+
+### Part 2 — Schema Notes
+
+- `sections/brand-showcase.liquid` schema validated against `schemas/section.json` ✅ — appeared in theme editor Add section picker with zero errors
+- `sections/drop-countdown.liquid` schema validated against `schemas/section.json` ✅ — appeared in theme editor Add section picker with zero errors
+- All block schemas validated against `schemas/theme_block.json` ✅ — all blocks appeared in Add block picker with zero errors
+
+### Part 4 — Verification Notes
+
+- Both sections added to homepage via theme editor — no JSON files edited manually ✅
+- Brand Showcase verified with Brand Heading, Brand Card and Brand Logo blocks all rendering ✅
+- Drop Countdown verified with Drop Title, Drop Timer and Drop Image blocks all rendering ✅
+- Background color and Brands per row settings toggled and confirmed working in theme editor ✅
+- Local preview confirmed at `http://127.0.0.1:9292` with zero Liquid errors ✅
+
+---

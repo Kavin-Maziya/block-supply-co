@@ -1,0 +1,64 @@
+{%- doc -%}
+  Displays the product teaser image for an upcoming drop.
+  Used in the drop-countdown section.
+{%- enddoc -%}
+
+<div class="drop-image-block" style="margin-bottom: 24px;">
+  {% if block.settings.image != blank %}
+    <img
+      src="{{ block.settings.image | image_url: width: 600 }}"
+      alt="{{ block.settings.image_alt }}"
+      width="600"
+      height="auto"
+      style="
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        object-fit: cover;
+      "
+      loading="lazy"
+    >
+  {% else %}
+    <div
+      style="
+        width: 100%;
+        max-width: 500px;
+        height: 300px;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        color: #aaa;
+        font-size: 0.9rem;
+      "
+    >
+      Drop image coming soon
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Drop Image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Teaser image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Upcoming drop teaser"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drop Image",
+      "category": "Drop"
+    }
+  ]
+}
+{% endschema %}

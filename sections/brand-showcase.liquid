@@ -1,0 +1,56 @@
+{%- liquid
+  assign bg = section.settings.background_color
+-%}
+
+<div
+  class="brand-showcase section"
+  style="
+    {% if bg != blank %}background-color: {{ bg }};{% endif %}
+    --columns: {{ section.settings.columns }};
+  "
+>
+  <div
+    class="brand-showcase__grid"
+    style="
+      display: grid;
+      grid-template-columns: repeat(var(--columns), 1fr);
+      gap: 24px;
+      padding: 40px 20px;
+    "
+  >
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brand Showcase",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Brands per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@theme"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Showcase",
+      "category": "Brand"
+    }
+  ]
+}
+{% endschema %}

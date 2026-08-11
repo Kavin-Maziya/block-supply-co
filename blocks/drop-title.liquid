@@ -1,0 +1,57 @@
+{%- doc -%}
+  Displays the drop name and release date label for an upcoming drop.
+  Used in the drop-countdown section.
+{%- enddoc -%}
+
+<div class="drop-title-block" style="margin-bottom: 16px;">
+  {% if block.settings.drop_label != blank %}
+    <p
+      style="
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #888;
+        margin: 0 0 8px;
+      "
+    >
+      {{ block.settings.drop_label }}
+    </p>
+  {% endif %}
+
+  <h2
+    style="
+      font-size: 2rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin: 0;
+    "
+  >
+    {{ block.settings.drop_name }}
+  </h2>
+</div>
+
+{% schema %}
+{
+  "name": "Drop Title",
+  "settings": [
+    {
+      "type": "text",
+      "id": "drop_name",
+      "label": "Drop name",
+      "default": "Air Jordan 4 Retro"
+    },
+    {
+      "type": "text",
+      "id": "drop_label",
+      "label": "Drop label",
+      "default": "Exclusive Drop"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drop Title",
+      "category": "Drop"
+    }
+  ]
+}
+{% endschema %}

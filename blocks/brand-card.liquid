@@ -1,0 +1,66 @@
+{%- doc -%}
+  Displays a brand name, tagline, and a "Shop Now" link.
+  Used in the brand-showcase section.
+{%- enddoc -%}
+
+<div
+  class="brand-card-block"
+  style="
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #eee;
+  "
+>
+  <h3 style="margin: 0 0 8px; font-size: 1.1rem; letter-spacing: 0.05em;">
+    {{ block.settings.brand_name }}
+  </h3>
+
+  {% if block.settings.show_tagline and block.settings.tagline != blank %}
+    <p style="color: #888; font-size: 0.85rem; margin: 0 0 12px;">
+      {{ block.settings.tagline }}
+    </p>
+  {% endif %}
+
+  {% if block.settings.link_url != blank %}
+    href="{{ block.settings.link_url }}" style="display: inline-block; padding: 8px 20px; background: #000; color: #fff;
+    font-size: 0.85rem; text-decoration: none;" > Shop Now
+    </a>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Brand Card",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "Brand Name"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Premium streetwear"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tagline",
+      "label": "Show tagline",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Shop Now link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Card",
+      "category": "Brand"
+    }
+  ]
+}
+{% endschema %}
