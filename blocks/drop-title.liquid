@@ -1,7 +1,10 @@
 {%- doc -%}
   Displays the drop name and release date label for an upcoming drop.
+  Also renders the colorway metafield and drop details metaobject if set on the selected product.
   Used in the drop-countdown section.
 {%- enddoc -%}
+
+{%- assign drop_product = block.settings.product | default: closest.product -%}
 
 <div class="drop-title-block" style="margin-bottom: 16px;">
   {% if block.settings.drop_label != blank %}
@@ -23,11 +26,62 @@
       font-size: 2rem;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin: 0;
+      margin: 0 0 8px;
     "
   >
     {{ block.settings.drop_name }}
   </h2>
+
+  {% comment %} Metafield: custom.colorway_name {% endcomment %}
+  {% assign colorway = drop_product.metafields.custom.colorway_name %}
+  {% if colorway != blank %}
+    <p
+      style="
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        color: #555;
+        margin: 0 0 16px;
+      "
+    >
+      Colorway: {{ colorway | metafield_text }}
+    </p>
+  {% endif %}
+
+  {% comment %} Metaobject: custom.drop_details {% endcomment %}
+  {% assign drop_details = drop_product.metafields.custom.drop_details.value %}
+  {% if drop_details != blank %}
+    <div
+      style="
+        border-top: 1px solid #eee;
+        margin-top: 16px;
+        padding-top: 16px;
+      "
+    >
+      {% if drop_details.retail_price.value != blank %}
+        <p
+          style="
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin: 0 0 8px;
+          "
+        >
+          {{ drop_details.story | metafield_tag }}
+        </p>
+      {% endif %}
+
+      {% if drop_details.story.value != blank %}
+        <div
+          style="
+            font-size: 0.82rem;
+            color: #555;
+            line-height: 1.6;
+          "
+        >
+          {% comment %} {{ drop_details.story.value }} {% endcomment %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
 </div>
 
 {% schema %}
@@ -35,10 +89,15 @@
   "name": "Drop Title",
   "settings": [
     {
+      "type": "product",
+      "id": "product",
+      "label": "Featured product"
+    },
+    {
       "type": "text",
       "id": "drop_name",
       "label": "Drop name",
-      "default": "Air Jordan 4 Retro"
+      "default": "Air Jordan 4 Retro Bred"
     },
     {
       "type": "text",

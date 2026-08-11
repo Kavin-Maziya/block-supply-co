@@ -214,3 +214,66 @@ A homepage section that announces an upcoming sneaker or streetwear drop with a 
 - Local preview confirmed at `http://127.0.0.1:9292` with zero Liquid errors ✅
 
 ---
+---
+
+## Day 4 — Metafields & Metaobjects
+
+### Part 1 — Metafield & Metaobject Plan
+
+#### 1.1 Metafield Plan
+
+- **Resource type:** Product
+- **Namespace.key:** `custom.colorway_name`
+- **Type:** Single line text
+- **Display:** Shown as a spec line under the drop title in `blocks/drop-title.liquid` — e.g. "Colorway: University Blue / White / Black". If the metafield is blank, the spec line doesn't render at all — no empty wrapper, no orphaned label.
+
+---
+
+#### 1.2 Metaobject Plan
+
+- **Type name:** `drop_details`
+- **Fields:**
+  - `story` — rich text (the narrative behind the drop, e.g. the collab history or design inspiration)
+  - `retail_price` — single line text (e.g. "R2,799.90")
+- **Real-world content:** A single drop story entry that can be reused across multiple drop announcements — merchants write the story once and reference it from any product without duplicating content.
+- **Access method:** Products reach it through a metafield of type Metaobject reference (`custom.drop_details`), following the same pattern as `blocks/disclosures.liquid` uses for `shopify.disclosure`.
+
+---
+
+#### 1.3 Integration Plan
+
+- **Target file:** `blocks/drop-title.liquid`
+- **Metafield blank state:** The colorway spec line doesn't render — no empty div, no label with nothing next to it
+- **Metaobject blank state:** The story and retail price section doesn't render at all — the block looks exactly as it did before
+
+---
+
+### Part 2 — Admin Definitions
+
+- Product metafield `custom.colorway_name` (Single line text) created in Admin ✅
+- Product metafield `custom.drop_details` (Metaobject reference → Drop Details) created in Admin ✅
+- Metaobject type `drop_details` created with `story` (Rich text) and `retail_price` (Single line text) fields ✅
+- Two entries created with real content — one for Air Jordan 4 Bred, one for Nike Air Force 1 Triple White ✅
+- Air Jordan 4 Retro "Bred" product created with both metafields populated ✅
+
+---
+
+### Part 3 — Integration Notes
+
+- Target file modified: `blocks/drop-title.liquid`
+- Added `block.settings.product` picker so merchants can select which product's metafields to surface
+- `custom.colorway_name` renders as a spec line under the drop title using `metafield_text`
+- `custom.drop_details` metaobject renders the retail price and story using `metafield_tag`
+- Both are wrapped in `{% if %} {% endif %}` guards — if blank, nothing renders
+
+---
+
+### Part 4 — Verification Notes
+
+- Populated state verified at `http://127.0.0.1:9292` with Air Jordan 4 Bred selected ✅
+- Colorway: Black / Cement Grey / Fire Red / Varsity Royal rendering correctly ✅
+- Retail price R2,799.90 and drop story rendering correctly ✅
+- Blank state verified — cleared product picker, colorway and story sections disappeared completely with no empty wrappers ✅
+- Zero Liquid errors confirmed ✅
+
+---

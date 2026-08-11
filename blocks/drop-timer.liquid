@@ -5,21 +5,25 @@
 
 <div class="drop-timer-block" style="margin-bottom: 24px;">
   {% if block.settings.release_date != blank %}
-    <p style="
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #888;
-      margin: 0 0 12px;
-    ">
+    <p
+      style="
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #888;
+        margin: 0 0 12px;
+      "
+    >
       Dropping
     </p>
-    <p style="
-      font-size: 1.4rem;
-      font-weight: bold;
-      letter-spacing: 0.08em;
-      margin: 0 0 16px;
-    ">
+    <p
+      style="
+        font-size: 1.4rem;
+        font-weight: bold;
+        letter-spacing: 0.08em;
+        margin: 0 0 16px;
+      "
+    >
       {{ block.settings.release_date }}
     </p>
   {% endif %}
@@ -35,26 +39,42 @@
     "
   >
     <div style="text-align: center;">
-      <span class="timer-days" style="display: block; font-size: 2rem; font-weight: bold; line-height: 1; min-width: 60px;">--</span>
+      <span
+        class="timer-days"
+        style="display: block; font-size: 2rem; font-weight: bold; line-height: 1; min-width: 60px;"
+        >--</span
+      >
       <span style="font-size: 0.65rem; letter-spacing: 0.12em; color: #888;">DAYS</span>
     </div>
     <div style="text-align: center;">
-      <span class="timer-hrs" style="display: block; font-size: 2rem; font-weight: bold; line-height: 1; min-width: 60px;">--</span>
+      <span
+        class="timer-hrs"
+        style="display: block; font-size: 2rem; font-weight: bold; line-height: 1; min-width: 60px;"
+        >--</span
+      >
       <span style="font-size: 0.65rem; letter-spacing: 0.12em; color: #888;">HRS</span>
     </div>
     <div style="text-align: center;">
-      <span class="timer-mins" style="display: block; font-size: 2rem; font-weight: bold; line-height: 1; min-width: 60px;">--</span>
+      <span
+        class="timer-mins"
+        style="display: block; font-size: 2rem; font-weight: bold; line-height: 1; min-width: 60px;"
+        >--</span
+      >
       <span style="font-size: 0.65rem; letter-spacing: 0.12em; color: #888;">MINS</span>
     </div>
     <div style="text-align: center;">
-      <span class="timer-secs" style="display: block; font-size: 2rem; font-weight: bold; line-height: 1; min-width: 60px;">--</span>
+      <span
+        class="timer-secs"
+        style="display: block; font-size: 2rem; font-weight: bold; line-height: 1; min-width: 60px;"
+        >--</span
+      >
       <span style="font-size: 0.65rem; letter-spacing: 0.12em; color: #888;">SECS</span>
     </div>
   </div>
 </div>
 
 <script>
-  (function() {
+  (function () {
     var container = document.getElementById('drop-timer-{{ block.id }}');
     var releaseDate = new Date(container.dataset.release);
 
@@ -77,7 +97,7 @@
       }
 
       var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      var hrs  = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       var secs = Math.floor((diff % (1000 * 60)) / 1000);
 
@@ -101,8 +121,8 @@
       "type": "text",
       "id": "release_date",
       "label": "Release date",
-      "info": "Use a format like: August 16, 2026 10:00:00",
-      "default": "August 16, 2026 10:00:00"
+      "info": "Use a format like: November 28, 2026 10:00:00",
+      "default": "November 28, 2026 10:00:00"
     }
   ],
   "presets": [
