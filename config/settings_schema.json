@@ -1619,6 +1619,23 @@
         "unit": "px",
         "default": 0
       }
+      ,{
+        "type": "header",
+        "content": "Free Shipping Indicator"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_free_shipping_indicator",
+        "label": "Show free shipping progress",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "Enter amount in whole currency units (e.g. 750 = R750.00). Set to 0 to disable.",
+        "default": 750
+      }
     ]
   },
   {

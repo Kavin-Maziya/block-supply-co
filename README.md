@@ -277,3 +277,145 @@ A homepage section that announces an upcoming sneaker or streetwear drop with a 
 - Zero Liquid errors confirmed ✅
 
 ---
+
+## Day 5 — Cart, AJAX & Interactivity
+
+### Part 1 — Written Decisions
+
+#### 1.1 Threshold Plan
+
+- **Setting id:** `free_shipping_threshold`
+- **Type:** `number`
+- **Scope:** Global — added to `config/settings_schema.json` inside the existing `"name": "t:names.cart"` group, not section-scoped. A free shipping threshold is a store-wide business rule — a merchant would never want one threshold on one cart drawer instance and a different one on another. Section-scoped settings suit layout or copy choices that vary per placement; a shipping policy threshold does not.
+- **Default value:** `75` (whole currency units — 75 = R750.00)
+- **Enable/disable setting id:** `enable_free_shipping_indicator` (checkbox)
+
+---
+
+#### 1.2 Messaging Plan
+
+- **"Still short" state:** `You're {{ remaining_amount | money }} away from free shipping!`
+- **"Threshold met" state:** `You've unlocked free shipping!`
+- **Disabled / zero-threshold fallback:** The entire indicator block does not render — no wrapper div, no empty space, no placeholder. The outermost element is wrapped in a Liquid `{% if %}` guard so nothing is output to the DOM at all.
+
+---
+
+#### 1.3 Integration Plan
+
+- **Target file:** `snippets/cart-drawer.liquid`
+- `snippets/cart-drawer.liquid` is rendered via `{% render 'cart-drawer' %}` inside `sections/cart-drawer-section.liquid`, making it part of that section's HTML output.
+- In `assets/component-cart-items.js`, quantity changes call `updateQuantity()`, which fetches `cart_change_url` and passes `sections: [this.sectionId]` in the request body. The response includes updated section HTML under `parsedResponseText.sections[this.sectionId]`. That HTML is passed directly to `morphSection(this.sectionId, ...)` from `@theme/section-renderer`, which replaces the section in-place — including all markup rendered by `cart-drawer.liquid`. The indicator's values (`cart.total_price`, threshold setting) are re-evaluated server-side on every morph.
+- External cart updates (e.g. add-to-cart) dispatch a `CartLinesUpdateEvent` caught by `#handleCartUpdate`, which also calls `morphSection` with the same section HTML from the event's resolved promise — or falls back to `sectionRenderer.renderSection` if no HTML was provided.
+- **No new JavaScript is required.** Both paths (`updateQuantity` and `#handleCartUpdate`) already replace the full section HTML, which includes the indicator markup. Adding a new fetch or event listener would double-render and is incorrect.
+
+
+### Part 3 — Verification
+
+#### 3.1 First Load (Progressive Enhancement Baseline)
+- Opened cart drawer with items already in cart before any JavaScript-driven update
+- Indicator rendered correctly on the initial server render — "You've unlocked free shipping!" with a full bar ✅
+
+#### 3.2 Live Update via Section Rendering
+- With the drawer open, added another item from the product page
+- Indicator message and bar updated with no full page reload ✅
+- Confirmed in DevTools → Network tab: the `add.js` request to `/cart/add` returned a JSON response containing `"sections":{"cart-drawer-section":"<div id=\"shopify-section-cart-drawer-section\"..."}` — the full section HTML is bundled in the cart response and passed directly to `morphSection()`. No separate `?section_id=` request is made — Horizon's `updateQuantity` and `#handleCartUpdate` flows handle the re-render entirely ✅
+
+#### 3.3 Both Message States and Off State
+- **Threshold met:** "You've unlocked free shipping!" with a full bar — confirmed with cart total above R750 ✅
+- **Still short:** "You're R 1,000.20 away from free shipping!" with a partial bar — confirmed by raising the threshold to R5000 in the theme editor ✅
+- **Disabled state:** Toggled `enable_free_shipping_indicator` off in the theme editor — indicator disappeared completely with no empty box or leftover space ✅
+
+#### 3.4 Existing Behavior Unaffected
+- Cart drawer opens correctly, quantity selectors work, empty cart state works ✅
+- No Liquid errors in the local preview ✅
+
+---
+
+### Part 4 — Validation & Version Control
+
+#### 4.1 Theme Check
+- Ran `shopify theme check` — 0 errors on all files touched in Day 5
+- 1 pre-existing warning in `blocks/brand-card.liquid` (unclosed `<a>` tag from Day 3) — fixed as part of this commit ✅
+
+---
+
+## Day 6 — Collections, Filtering & Merchandising
+
+### Part 1 — Written Decisions
+
+#### 1.1 Collection & Filter Plan
+
+- **Collection:** All products (handle: `all`) — contains Adidas Campus 00s, Nike Air Force 1, Adidas Samba OG, Nike Dunk Low, Nike Air Max 95
+- **Filter dimension 1:** `Shoe size` — list filter on the product option, already exists and varies across all products ✅
+- **Filter dimension 2:** `Price` — price_range filter, products already vary in price (R1,999.90 – R2,799.90) ✅
+- **Filter dimension 3:** `Color` — list filter on the Color option, all products already have Color values assigned ✅
+- **Data gap:** None — all three filter dimensions have real varied data across products with no setup required
+- **Settings changed from defaults:**
+  - `enable_filtering` → turned ON (default is `false` — nothing renders without this)
+  - `filter_style` → set to `vertical` (default is `horizontal` — vertical keeps filters always visible on desktop alongside the product grid, which suits a sneaker store browse experience)
+  - `enable_sorting` → left ON (already the default)
+
+---
+
+#### 1.2 Swatch Plan
+
+- **Products:** Nike Air Force 1 Low '07 'Triple White', Adidas Campus 00s 'Core Black', Adidas Samba OG 'White & Black'
+- **Option:** `Color`
+- **Swatch values to assign in Admin:**
+  - `White` — white swatch
+  - `Core Black` — black swatch
+  - `White & Black` — white swatch with black
+- **Where swatches appear:** The collection grid card via `blocks/swatches.liquid` — this block reads `closest.product.options_with_values` and checks for assigned swatch data via `product_option.values | map: 'swatch' | compact`. No new block needs to be created; the swatches block already exists in the product card and will render automatically once swatch colors are assigned in Admin.
+
+---
+
+#### 1.3 Customization Plan
+
+- **File:** `blocks/filters.liquid`
+- **Edit:** Inside the existing `{% stylesheet %}` block, add a CSS rule that gives the active filter count bubble a distinct accent color using the theme's existing `--color-foreground-rgb` token at full opacity, making it visually stand out more clearly from the default muted style
+- **Selector:** `.filter-count-bubble__background`
+- **What it visibly changes:** The active filter count bubble background becomes more prominent — clearly signaling to the user that filters are active
+
+
+### Part 2 — Build
+
+#### 2.1 Filter Configuration (Search & Discovery App)
+- Opened Search & Discovery app → Filters
+- Added `Color` (product option) and `Shoe size` (product option) to the existing Availability and Price filters
+- Left filter logic as OR — customers see all products matching any selected size or color, not only products matching every filter simultaneously ✅
+
+#### 2.2 Swatch Setup (Admin → Metafields and metaobjects → Color)
+- Two swatch entries already existed: `Black` (#000000) and `White` (#FFFFFF)
+- All products already had a `Color` option with values linked to these swatch entries
+- No new swatch entries required — Horizon reads swatches via `product_option.values | map: 'swatch'` and renders them automatically on the collection card ✅
+
+#### 2.3 Theme Editor Settings (Filtering and sorting block)
+- Filters → ON
+- Direction → Vertical
+- Text label case → Uppercase
+- Sorting → left ON (default) ✅
+
+#### 2.4 Code Edit — `blocks/filters.liquid`
+- Added two CSS rules inside the existing `{% stylesheet %}` block targeting `.filter-count-bubble__background` and `.filter-count-bubble__text`
+- `.filter-count-bubble__background` uses `rgb(var(--color-foreground-rgb))` at full opacity — making the active filter count bubble solid black instead of the default muted style
+- `.filter-count-bubble__text` uses `rgb(var(--color-background-rgb))` to keep the number legible against the dark background ✅
+
+---
+
+### Part 3 — Verification
+
+#### 3.1 All Four Filter Dimensions Rendering
+- AVAILABILITY, PRICE, COLOR (color chip swatches), and SHOE SIZE (button swatches) all visible in the vertical filter panel on desktop and in the mobile filter drawer ✅
+
+#### 3.2 Filters Update Without Full Page Reload
+- Applied Availability and Color filters simultaneously
+- Network tab confirmed requests to `all?filter.v.availability=1&fil...` as `fetch` type — not a full page navigation
+- URL updated with filter parameters, grid updated live, "See X items" count updated in the mobile drawer in real time ✅
+
+#### 3.3 Filter Count Bubble
+- Active filter count bubble rendered with solid black background and white text from the CSS edit in `blocks/filters.liquid` ✅
+
+#### 3.4 Theme Check
+- `shopify theme check` — 0 errors, 0 warnings on all files touched in Day 6 ✅
+
+---

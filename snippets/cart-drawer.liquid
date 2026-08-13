@@ -114,6 +114,34 @@
                 <scroll-hint class="cart-drawer__items">
                   {% render 'cart-products', context: 'drawer' %}
                 </scroll-hint>
+{%- liquid
+                  assign threshold_cents = settings.free_shipping_threshold | times: 100
+                  assign remaining_cents = threshold_cents | minus: cart.total_price
+                  assign progress = cart.total_price | times: 100 | divided_by: threshold_cents
+                  if progress > 100
+                    assign progress = 100
+                  endif
+                -%}
+
+                {%- if settings.enable_free_shipping_indicator and settings.free_shipping_threshold > 0 -%}
+                  <div class="free-shipping-indicator">
+                    {%- if remaining_cents > 0 -%}
+                      <p class="free-shipping-indicator__message">
+                        You're {{ remaining_cents | money }} away from free shipping!
+                      </p>
+                    {%- else -%}
+                      <p class="free-shipping-indicator__message free-shipping-indicator__message--unlocked">
+                        You've unlocked free shipping!
+                      </p>
+                    {%- endif -%}
+                    <div class="free-shipping-indicator__bar-track">
+                      <div
+                        class="free-shipping-indicator__bar-fill"
+                        style="width: {{ progress }}%;"
+                      ></div>
+                    </div>
+                  </div>
+                {%- endif -%}
 
                 <div class="cart-drawer__summary">
                   {% render 'cart-summary', section_id: 'cart-drawer-section' %}
@@ -276,5 +304,38 @@
     .cart-drawer__content {
       background: transparent;
     }
+  }
+  .free-shipping-indicator {
+    padding-inline: var(--cart-drawer-padding);
+    padding-block: var(--gap-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .free-shipping-indicator__message {
+    margin: 0;
+    font-size: 0.875em;
+    color: rgb(var(--color-foreground-rgb));
+  }
+
+  .free-shipping-indicator__message--unlocked {
+    color: rgb(var(--color-foreground-rgb));
+    font-weight: 600;
+  }
+
+  .free-shipping-indicator__bar-track {
+    width: 100%;
+    height: 4px;
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .free-shipping-indicator__bar-fill {
+    height: 100%;
+    background-color: rgb(var(--color-foreground-rgb));
+    border-radius: 100px;
+    transition: width 0.4s ease;
   }
 {% endstylesheet %}
