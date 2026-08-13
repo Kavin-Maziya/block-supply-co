@@ -338,3 +338,84 @@ A homepage section that announces an upcoming sneaker or streetwear drop with a 
 - 1 pre-existing warning in `blocks/brand-card.liquid` (unclosed `<a>` tag from Day 3) — fixed as part of this commit ✅
 
 ---
+
+## Day 6 — Collections, Filtering & Merchandising
+
+### Part 1 — Written Decisions
+
+#### 1.1 Collection & Filter Plan
+
+- **Collection:** All products (handle: `all`) — contains Adidas Campus 00s, Nike Air Force 1, Adidas Samba OG, Nike Dunk Low, Nike Air Max 95
+- **Filter dimension 1:** `Shoe size` — list filter on the product option, already exists and varies across all products ✅
+- **Filter dimension 2:** `Price` — price_range filter, products already vary in price (R1,999.90 – R2,799.90) ✅
+- **Filter dimension 3:** `Color` — list filter on the Color option, all products already have Color values assigned ✅
+- **Data gap:** None — all three filter dimensions have real varied data across products with no setup required
+- **Settings changed from defaults:**
+  - `enable_filtering` → turned ON (default is `false` — nothing renders without this)
+  - `filter_style` → set to `vertical` (default is `horizontal` — vertical keeps filters always visible on desktop alongside the product grid, which suits a sneaker store browse experience)
+  - `enable_sorting` → left ON (already the default)
+
+---
+
+#### 1.2 Swatch Plan
+
+- **Products:** Nike Air Force 1 Low '07 'Triple White', Adidas Campus 00s 'Core Black', Adidas Samba OG 'White & Black'
+- **Option:** `Color`
+- **Swatch values to assign in Admin:**
+  - `White` — white swatch
+  - `Core Black` — black swatch
+  - `White & Black` — white swatch with black
+- **Where swatches appear:** The collection grid card via `blocks/swatches.liquid` — this block reads `closest.product.options_with_values` and checks for assigned swatch data via `product_option.values | map: 'swatch' | compact`. No new block needs to be created; the swatches block already exists in the product card and will render automatically once swatch colors are assigned in Admin.
+
+---
+
+#### 1.3 Customization Plan
+
+- **File:** `blocks/filters.liquid`
+- **Edit:** Inside the existing `{% stylesheet %}` block, add a CSS rule that gives the active filter count bubble a distinct accent color using the theme's existing `--color-foreground-rgb` token at full opacity, making it visually stand out more clearly from the default muted style
+- **Selector:** `.filter-count-bubble__background`
+- **What it visibly changes:** The active filter count bubble background becomes more prominent — clearly signaling to the user that filters are active
+
+
+### Part 2 — Build
+
+#### 2.1 Filter Configuration (Search & Discovery App)
+- Opened Search & Discovery app → Filters
+- Added `Color` (product option) and `Shoe size` (product option) to the existing Availability and Price filters
+- Left filter logic as OR — customers see all products matching any selected size or color, not only products matching every filter simultaneously ✅
+
+#### 2.2 Swatch Setup (Admin → Metafields and metaobjects → Color)
+- Two swatch entries already existed: `Black` (#000000) and `White` (#FFFFFF)
+- All products already had a `Color` option with values linked to these swatch entries
+- No new swatch entries required — Horizon reads swatches via `product_option.values | map: 'swatch'` and renders them automatically on the collection card ✅
+
+#### 2.3 Theme Editor Settings (Filtering and sorting block)
+- Filters → ON
+- Direction → Vertical
+- Text label case → Uppercase
+- Sorting → left ON (default) ✅
+
+#### 2.4 Code Edit — `blocks/filters.liquid`
+- Added two CSS rules inside the existing `{% stylesheet %}` block targeting `.filter-count-bubble__background` and `.filter-count-bubble__text`
+- `.filter-count-bubble__background` uses `rgb(var(--color-foreground-rgb))` at full opacity — making the active filter count bubble solid black instead of the default muted style
+- `.filter-count-bubble__text` uses `rgb(var(--color-background-rgb))` to keep the number legible against the dark background ✅
+
+---
+
+### Part 3 — Verification
+
+#### 3.1 All Four Filter Dimensions Rendering
+- AVAILABILITY, PRICE, COLOR (color chip swatches), and SHOE SIZE (button swatches) all visible in the vertical filter panel on desktop and in the mobile filter drawer ✅
+
+#### 3.2 Filters Update Without Full Page Reload
+- Applied Availability and Color filters simultaneously
+- Network tab confirmed requests to `all?filter.v.availability=1&fil...` as `fetch` type — not a full page navigation
+- URL updated with filter parameters, grid updated live, "See X items" count updated in the mobile drawer in real time ✅
+
+#### 3.3 Filter Count Bubble
+- Active filter count bubble rendered with solid black background and white text from the CSS edit in `blocks/filters.liquid` ✅
+
+#### 3.4 Theme Check
+- `shopify theme check` — 0 errors, 0 warnings on all files touched in Day 6 ✅
+
+---
