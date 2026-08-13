@@ -1,0 +1,121 @@
+{%- liquid
+  assign product = block.settings.product | default: section.settings.product
+  assign release_year = product.metafields.custom.release_year.value
+-%}
+
+<div class="spotlight-story" {{ block.shopify_attributes }}>
+
+  {%- if section.settings.section_label != blank -%}
+    <p class="spotlight-story__eyebrow">
+      {{ section.settings.section_label | upcase }}
+    </p>
+  {%- endif -%}
+
+  {%- if product != blank -%}
+
+    <h2 class="spotlight-story__title">
+      {{ product.title | escape }}
+    </h2>
+
+    {%- if product.compare_at_price > product.price -%}
+      <p class="spotlight-story__pricing">
+        <span class="spotlight-story__price-compare">
+          {{ product.compare_at_price | money }}
+        </span>
+        <span class="spotlight-story__price-current">
+          {{ product.price | money }}
+        </span>
+        <span class="spotlight-story__badge">
+          {{ 'On Sale' | upcase }}
+        </span>
+      </p>
+    {%- else -%}
+      <p class="spotlight-story__pricing">
+        <span class="spotlight-story__price-current">
+          {{ product.price | money }}
+        </span>
+      </p>
+    {%- endif -%}
+
+    {%- if release_year != blank -%}
+      <p class="spotlight-story__year">
+        Silhouette est. <strong>{{ release_year }}</strong>
+      </p>
+    {%- endif -%}
+
+    {%- if product.description != blank -%}
+      <div class="spotlight-story__description">
+        {{ product.description | strip_html | truncate: 220 }}
+      </div>
+    {%- endif -%}
+
+  {%- else -%}
+    <p class="spotlight-story__empty">No product selected.</p>
+  {%- endif -%}
+
+</div>
+
+{% stylesheet %}
+.spotlight-story__eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  margin: 0 0 12px;
+  opacity: 0.6;
+}
+.spotlight-story__title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+  line-height: 1.1;
+}
+.spotlight-story__pricing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+.spotlight-story__price-compare {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.spotlight-story__price-current {
+  font-weight: 700;
+}
+.spotlight-story__badge {
+  background: #111;
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+.spotlight-story__year {
+  font-size: 0.85rem;
+  opacity: 0.65;
+  margin: 0 0 16px;
+}
+.spotlight-story__description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+.spotlight-story__empty {
+  opacity: 0.4;
+  font-style: italic;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Story",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Override product (optional)",
+      "info": "Leave blank to use the section-level product"
+    }
+  ]
+}
+{% endschema %}
