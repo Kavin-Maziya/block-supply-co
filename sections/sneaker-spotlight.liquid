@@ -1,0 +1,131 @@
+{%- liquid
+  assign spotlight_product = section.settings.product
+-%}
+
+<section
+  class="sneaker-spotlight sneaker-spotlight--{{ section.id }}"
+  style="
+    --spotlight-bg: {{ section.settings.background_color }};
+    --spotlight-text: {{ section.settings.text_color }};
+  "
+>
+  <div class="sneaker-spotlight__inner page-width">
+
+    <div class="sneaker-spotlight__media">
+      {%- if spotlight_product != blank and spotlight_product.featured_image != blank -%}
+        <img
+          src="{{ spotlight_product.featured_image | image_url: width: 800 }}"
+          alt="{{ spotlight_product.featured_image.alt | escape }}"
+          width="800"
+          height="{{ 800 | divided_by: spotlight_product.featured_image.aspect_ratio | round }}"
+          loading="lazy"
+        >
+      {%- else -%}
+        <div class="sneaker-spotlight__media-placeholder">
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="sneaker-spotlight__content">
+      {% content_for 'blocks' %}
+    </div>
+
+  </div>
+</section>
+
+{% stylesheet %}
+.sneaker-spotlight {
+  background-color: var(--spotlight-bg);
+  color: var(--spotlight-text);
+  padding: 60px 0;
+}
+.sneaker-spotlight__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.sneaker-spotlight__media img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+.sneaker-spotlight__media-placeholder {
+  aspect-ratio: 1;
+  background: #f4f4f4;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sneaker-spotlight__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+@media (max-width: 749px) {
+  .sneaker-spotlight__inner {
+    grid-template-columns: 1fr;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Sneaker Spotlight",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Spotlight product"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour",
+      "default": "#111111"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section eyebrow label",
+      "default": "Drop Spotlight"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image side",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    }
+  ],
+  "blocks": [
+    { "type": "spotlight-story" },
+    { "type": "spotlight-faq" },
+    { "type": "spotlight-picker" }
+  ],
+  "presets": [
+    {
+      "name": "Sneaker Spotlight",
+      "blocks": [
+        { "type": "spotlight-story" },
+        { "type": "spotlight-faq" },
+        { "type": "spotlight-picker" }
+      ]
+    }
+  ]
+}
+{% endschema %}

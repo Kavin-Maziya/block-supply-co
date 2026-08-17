@@ -419,3 +419,89 @@ A homepage section that announces an upcoming sneaker or streetwear drop with a 
 - `shopify theme check` — 0 errors, 0 warnings on all files touched in Day 6 ✅
 
 ---
+
+---
+
+## In-Class Challenge: Merchandising Spotlight
+
+### Part 1 — Plan
+
+**Section name and file path:** `sections/sneaker-spotlight.liquid`
+
+**3 Block types:**
+
+| Block file | Purpose |
+|---|---|
+| `blocks/spotlight-story.liquid` | Shows the product title, `custom.release_year` metafield, and a `description` |
+| `blocks/spotlight-faq.liquid` | Shows a single FAQ entry from a `sneaker_faq` metaobject |
+| `blocks/spotlight-picker.liquid` | Swatch variant picker tied to the product's `Shoe size` and the add-to-cart button with no reload |
+
+**Spotlight product:** Nike Air Force 1 Low '07 'Triple White'
+
+**New metafield:**
+- Namespace.key: `custom.release_year`
+- Type: Single line text
+- Defined on: Product
+- Purpose: Displays the silhouette's original release year inside `blocks/spotlight-story.liquid`
+
+**New metaobject type:**
+- Name: `sneaker_faq`
+- Fields: `question` (Single line text) + `answer` (Multi-line text)
+- One real entry: Do Air Force 1s run true to size? / "Air Force 1s run large — we recommend sizing down half a size from your usual Nike size. If you have wide feet, your normal size should work fine."
+- Rendered inside: `blocks/spotlight-faq.liquid`
+
+**Swatch/variant picker:** `blocks/spotlight-picker.liquid` reads from the `Shoe size` option on the Nike Air Force 1 Low '07.
+
+---
+### Part 2 — Filter & Conditional Log
+
+| Filter | File | Effect |
+|---|---|---|
+| `upcase` | `blocks/spotlight-story.liquid` | Renders the section eyebrow label in uppercase |
+| `escape` | `blocks/spotlight-story.liquid` | Sanitises the product title before output |
+| `money` | `blocks/spotlight-story.liquid` | Formats `product.price` and `product.compare_at_price` as currency |
+| `strip_html` | `blocks/spotlight-story.liquid` | Removes any HTML tags from the product description before truncating |
+| `truncate` | `blocks/spotlight-story.liquid` | Caps the product description at 220 characters |
+
+**Conditional:** `product.compare_at_price > product.price` in `blocks/spotlight-story.liquid` — checks whether the product is on sale. If true, renders both the compare-at price (struck through) and current price with a sale badge. If false, renders the current price only.
+
+---
+
+### Part 3 — Structured Content Notes
+
+**Metafield:**
+- Definition: `custom.release_year` (Single line text) on the Product resource
+- Value on spotlight product: `1982`
+- Rendered in: `blocks/spotlight-story.liquid` as "Silhouette est. 1982"
+- Blank-state: wrapped in `{%- if release_year != blank -%}` — the line does not render if the metafield is unset
+
+**Metaobject:**
+- Definition: `sneaker_faq` with fields `question` (Single line text) and `answer` (Multi-line text)
+- Entry: "Do Air Force 1s run true to size?" / "Air Force 1s run large — we recommend sizing down half a size from your usual Nike size. If you have wide feet, your normal size should work fine."
+- Rendered in: `blocks/spotlight-faq.liquid`
+- Blank-state: wrapped in `{%- if faq_entry != blank -%}` — renders "No FAQ entry selected." if no metaobject entry is assigned in the theme editor
+
+---
+
+### Part 4 — Interactivity Notes
+
+**Variant picker:** `blocks/spotlight-picker.liquid` renders the `Shoe size` option values (6.5, 7, 8, 9, 10, 11) as radio-input size tiles. Each tile is labelled with the size value and marked sold-out if `variant.available == false`.
+
+**Add to cart:** The form uses Horizon's `<product-form-component>` custom element wrapping a standard `{%- form 'product' -%}` tag. The custom element intercepts the submit event and handles the cart update via the Section Rendering API without a full page reload. No new JavaScript was written — the existing `product-form-component` registration in `assets/product-form.js` handles all cart interaction.
+
+**Network tab confirmation:** On Add to Cart, the request goes to `/cart/add` and the cart count updates without a full page reload. The `product-form-component` element manages the AJAX submission using Horizon's existing cart infrastructure.
+
+---
+
+### Part 5 — Verification Notes
+
+- `shopify theme check` returned zero errors on all modified files
+- Full end-to-end walkthrough completed on `127.0.0.1:9292/pages/sneaker-sportlight`:
+  - Section renders with product image, title, price, metafield, FAQ, size tiles, and Add to Cart button
+  - `custom.release_year` metafield displays "Silhouette est. 1982"
+  - `sneaker_faq` metaobject entry renders question and answer correctly
+  - Size tiles render all six variants (6.5–11)
+  - Add to Cart successfully adds the selected variant to the cart
+- Section added to the `sneaker-sportlight` page via the theme editor — no JSON template hand-editing
+
+---
