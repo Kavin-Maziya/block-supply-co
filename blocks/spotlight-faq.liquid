@@ -3,7 +3,6 @@
 -%}
 
 <div class="spotlight-faq" {{ block.shopify_attributes }}>
-
   {%- if block.settings.heading != blank -%}
     <p class="spotlight-faq__heading">
       {{ block.settings.heading | upcase }}
@@ -11,9 +10,7 @@
   {%- endif -%}
 
   {%- if faq_entry != blank -%}
-
     <div class="spotlight-faq__entry">
-
       {%- if faq_entry.question != blank -%}
         <p class="spotlight-faq__question">
           {{ faq_entry.question.value }}
@@ -25,44 +22,42 @@
           {{ faq_entry.answer.value }}
         </p>
       {%- endif -%}
-
     </div>
 
   {%- else -%}
     <p class="spotlight-faq__empty">No FAQ entry selected.</p>
   {%- endif -%}
-
 </div>
 
 {% stylesheet %}
-.spotlight-faq {
-  border-top: 1px solid currentColor;
-  padding-top: 20px;
-  opacity: 0.9;
-}
-.spotlight-faq__heading {
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  margin: 0 0 14px;
-  opacity: 0.55;
-}
-.spotlight-faq__question {
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin: 0 0 8px;
-  line-height: 1.4;
-}
-.spotlight-faq__answer {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin: 0;
-  opacity: 0.8;
-}
-.spotlight-faq__empty {
-  font-style: italic;
-  opacity: 0.4;
-  font-size: 0.9rem;
-}
+  .spotlight-faq {
+    border-top: 1px solid currentColor;
+    padding-top: 20px;
+    opacity: 0.9;
+  }
+  .spotlight-faq__heading {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    margin: 0 0 14px;
+    color: #555555;
+  }
+  .spotlight-faq__question {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+    line-height: 1.4;
+  }
+  .spotlight-faq__answer {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.8;
+  }
+  .spotlight-faq__empty {
+    font-style: italic;
+    opacity: 0.4;
+    font-size: 0.9rem;
+  }
 {% endstylesheet %}
 
 {% schema %}
