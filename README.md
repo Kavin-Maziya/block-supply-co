@@ -609,4 +609,13 @@ Spotlight page (`127.0.0.1:9292/pages/sneaker-sportlight`):
 - Named theme `block-supply-co/main` pushed via CLI and confirmed matching local preview
 - All files committed
 
-  ---
+### Stretch A — Automated Theme Check
+
+The GitHub Actions workflow at `.github/workflows/ci.yml` runs `shopify theme check` automatically on every push and on every pull request targeting `main`, using the `shopify/theme-check-action@v2` action.
+
+**What happens if it fails on a future PR:**
+If `shopify theme check` finds errors in any file touched by the PR, the `Theme Check` job fails and shows a red cross on the pull request. The PR cannot be merged until the errors are resolved — enforcing that no new theme check errors are introduced into the codebase. Warnings do not fail the job, only errors do.
+
+Workflow file: `.github/workflows/ci.yml`
+
+---

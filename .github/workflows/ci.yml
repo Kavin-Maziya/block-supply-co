@@ -1,5 +1,10 @@
 name: CI
-on: [push]
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
 jobs:
   lhci:
     name: Lighthouse
@@ -12,6 +17,7 @@ jobs:
           store: ${{ secrets.SHOP_STORE }}
           access_token: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
           collection_handle: all
+
   theme-check:
     name: Theme Check
     runs-on: ubuntu-latest
