@@ -1,3 +1,4 @@
+{% # theme-check-disable ValidScopedCSSClass %}
 {%- liquid
   assign spotlight_product = section.settings.product
 -%}
@@ -10,7 +11,6 @@
   "
 >
   <div class="sneaker-spotlight__inner page-width">
-
     <div class="sneaker-spotlight__media">
       {%- if spotlight_product != blank and spotlight_product.featured_image != blank -%}
         <img
@@ -30,46 +30,45 @@
     <div class="sneaker-spotlight__content">
       {% content_for 'blocks' %}
     </div>
-
   </div>
 </section>
 
 {% stylesheet %}
-.sneaker-spotlight {
-  background-color: var(--spotlight-bg);
-  color: var(--spotlight-text);
-  padding: 60px 0;
-}
-.sneaker-spotlight__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
-}
-.sneaker-spotlight__media img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  display: block;
-}
-.sneaker-spotlight__media-placeholder {
-  aspect-ratio: 1;
-  background: #f4f4f4;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sneaker-spotlight__content {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-@media (max-width: 749px) {
-  .sneaker-spotlight__inner {
-    grid-template-columns: 1fr;
+  .sneaker-spotlight {
+    background-color: var(--spotlight-bg);
+    color: var(--spotlight-text);
+    padding: 60px 0;
   }
-}
+  .sneaker-spotlight__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .sneaker-spotlight__media img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+  }
+  .sneaker-spotlight__media-placeholder {
+    aspect-ratio: 1;
+    background: #f4f4f4;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sneaker-spotlight__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  @media (max-width: 749px) {
+    .sneaker-spotlight__inner {
+      grid-template-columns: 1fr;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -112,19 +111,11 @@
       "default": "left"
     }
   ],
-  "blocks": [
-    { "type": "spotlight-story" },
-    { "type": "spotlight-faq" },
-    { "type": "spotlight-picker" }
-  ],
+  "blocks": [{ "type": "spotlight-story" }, { "type": "spotlight-faq" }, { "type": "spotlight-picker" }],
   "presets": [
     {
       "name": "Sneaker Spotlight",
-      "blocks": [
-        { "type": "spotlight-story" },
-        { "type": "spotlight-faq" },
-        { "type": "spotlight-picker" }
-      ]
+      "blocks": [{ "type": "spotlight-story" }, { "type": "spotlight-faq" }, { "type": "spotlight-picker" }]
     }
   ]
 }

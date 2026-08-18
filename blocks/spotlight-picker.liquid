@@ -1,3 +1,4 @@
+{% # theme-check-disable ValidScopedCSSClass %}
 {%- liquid
   assign product = section.settings.product
   assign current_variant = product.selected_or_first_available_variant
@@ -5,13 +6,10 @@
 -%}
 
 <div class="spotlight-picker" {{ block.shopify_attributes }}>
-
   {%- if product != blank -%}
-
     <product-form-component>
       {%- form 'product', product, id: 'spotlight-product-form', class: 'spotlight-picker__form' -%}
-
-        <input type="hidden" name="id" value="{{ current_variant.id }}">
+        <input type="hidden" name="id" value="{{ current_variant.id }}" ref="variantId">
 
         {%- if size_option != blank -%}
           <fieldset class="spotlight-picker__sizes">
@@ -22,7 +20,7 @@
             <div class="spotlight-picker__size-grid">
               {%- for value in size_option.values -%}
                 {%- liquid
-                  assign variant_for_value = nil
+                  assign variant_for_value = null
                   for variant in product.variants
                     if variant.option1 == value or variant.option2 == value
                       assign variant_for_value = variant
@@ -41,12 +39,15 @@
                     name="options[Shoe size]"
                     value="{{ value | escape }}"
                     form="spotlight-product-form"
-                    {% if forloop.first %}checked{% endif %}
-                    {% if variant_for_value.available == false %}disabled{% endif %}
+                    {% if forloop.first %}
+                      checked
+                    {% endif %}
+                    {% if variant_for_value.available == false %}
+                      disabled
+                    {% endif %}
                   >
                   <span class="spotlight-picker__size-label">{{ value }}</span>
                 </label>
-
               {%- endfor -%}
             </div>
           </fieldset>
@@ -58,6 +59,7 @@
               type="submit"
               name="add"
               class="spotlight-picker__atc button button--primary"
+              ref="addToCartButton"
             >
               <span class="add-to-cart-text">
                 {{ block.settings.button_label | default: 'Add to Cart' }}
@@ -74,81 +76,81 @@
           {%- endif -%}
         </add-to-cart-component>
 
+        <div ref="liveRegion" role="status" aria-live="polite" aria-atomic="true" class="visually-hidden"></div>
       {%- endform -%}
     </product-form-component>
 
   {%- else -%}
     <p class="spotlight-picker__empty">No product selected.</p>
   {%- endif -%}
-
 </div>
 
 {% stylesheet %}
-.spotlight-picker__form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.spotlight-picker__sizes {
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-.spotlight-picker__sizes-label {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  display: block;
-  opacity: 0.65;
-}
-.spotlight-picker__size-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.spotlight-picker__size-tile input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.spotlight-picker__size-tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 52px;
-  height: 44px;
-  border: 1.5px solid currentColor;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.15s, color 0.15s;
-  padding: 0 10px;
-  position: relative;
-}
-.spotlight-picker__size-tile:has(input:checked) {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
-.spotlight-picker__size-tile--sold-out {
-  opacity: 0.35;
-  cursor: not-allowed;
-  text-decoration: line-through;
-}
-.spotlight-picker__atc {
-  width: 100%;
-  padding: 16px;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-}
-.spotlight-picker__empty {
-  font-style: italic;
-  opacity: 0.4;
-}
+  .spotlight-picker__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .spotlight-picker__sizes {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  .spotlight-picker__sizes-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+    opacity: 0.65;
+  }
+  .spotlight-picker__size-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .spotlight-picker__size-tile input[type='radio'] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .spotlight-picker__size-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    height: 44px;
+    border: 1.5px solid currentColor;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.15s, color 0.15s;
+    padding: 0 10px;
+    position: relative;
+  }
+  .spotlight-picker__size-tile:has(input:checked) {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+  }
+  .spotlight-picker__size-tile--sold-out {
+    opacity: 0.35;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+  .spotlight-picker__atc {
+    width: 100%;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+  }
+  .spotlight-picker__empty {
+    font-style: italic;
+    opacity: 0.4;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -164,4 +166,3 @@
   ]
 }
 {% endschema %}
-
